@@ -50,14 +50,15 @@ def initialize_extensions(app):
 
 
 def register_endpoints(app):
-    from battleforcastile_auth.endpoints.users import UserListResource, UserResource, UserLogin
+    from battleforcastile_auth.endpoints.users import UserListResource, GetUserResource, UserLogin
     from battleforcastile_auth.endpoints.root import RootResource
 
     api = Api(app)
 
-    api.add_resource(UserListResource, '/api/v1/users/')
-    api.add_resource(UserResource, '/api/v1/get_user/')
-    api.add_resource(UserLogin, '/api/v1/login/')
+    api.add_resource(UserListResource, '/api/v1/account/create/')
+    api.add_resource(UserLogin, '/api/v1/account/login/')
+    api.add_resource(GetUserResource, '/api/v1/account/')
+
     api.add_resource(PrometheusResource, '/metrics')
 
     api.add_resource(RootResource, '/')

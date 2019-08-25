@@ -12,11 +12,6 @@ from battleforcastile_auth.serializers.users import serialize_user
 
 
 class UserListResource(Resource):
-    def get(self):
-        users = User.query.all()
-
-        return [serialize_user(user) for user in users], 200
-
     def post(self):
         data = json.loads(request.data) if request.data else {}
 
@@ -39,7 +34,7 @@ class UserListResource(Resource):
 
         return serialize_user(user), 201
 
-class UserResource(Resource):
+class GetUserResource(Resource):
     def post(self):
         data = json.loads(request.data) if request.data else {}
 
