@@ -1,6 +1,8 @@
 # Battle For Castile: Auth
 
-This micro-service handles the Auth and User creation.
+[![CircleCI](https://circleci.com/gh/battleforcastile/battleforcastile-auth/tree/master.svg?style=svg)](https://circleci.com/gh/battleforcastile/battleforcastile-auth/tree/master)
+
+This micro-service handles the Authenticaton and User creation.
 ## 1. Installation and set up
 
 This guide assumes that there's a K8s cluster (with Helm-tiller) and Postgres SQL DB set up in Google Cloud.
