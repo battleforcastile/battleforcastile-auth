@@ -9,7 +9,6 @@ pytest = "*"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
-uwsgi = "*"
 pg8000 = "==1.11.0"
 alembic = "*"
 flask-migrate = "*"
