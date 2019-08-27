@@ -71,8 +71,8 @@ class DeleteUserResource(Resource):
         if user:
             db.session.delete(user)
             db.session.commit()
-            return '', 204
-        return '', 404
+            return 'Account deleted', 204
+        return 'Account not found', 404
 
 
 class UserLogin(Resource):
