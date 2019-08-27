@@ -50,12 +50,13 @@ def initialize_extensions(app):
 
 
 def register_endpoints(app):
-    from battleforcastile_auth.endpoints.users import UserListResource, GetUserResource, UserLogin
+    from battleforcastile_auth.endpoints.users import UserListResource, DeleteUserResource, GetUserResource, UserLogin
     from battleforcastile_auth.endpoints.root import RootResource
 
     api = Api(app)
 
     api.add_resource(UserListResource, '/api/v1/account/create/')
+    api.add_resource(DeleteUserResource, '/api/v1/account/delete/')
     api.add_resource(UserLogin, '/api/v1/account/login/')
     api.add_resource(GetUserResource, '/api/v1/account/')
 

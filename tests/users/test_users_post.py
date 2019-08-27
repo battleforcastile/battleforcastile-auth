@@ -10,7 +10,7 @@ def test_users_are_successfully_created(init_database, test_client):
     new_user = {
         'username': 'blabla',
         'email': 'blabla@example.com',
-        'password': '12345'
+        'password': '123456789'
     }
     rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
 
@@ -22,10 +22,49 @@ def test_users_are_successfully_created(init_database, test_client):
     assert check_password_hash(created_user.password, new_user.get('password'))
 
 
+def test_users_is_not_created_because_email_already_exists(init_database, test_client):
+    new_user = {
+        'username': 'blabla',
+        'email': 'blabla@example.com',
+        'password': '123456789'
+    }
+    rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
+    assert rv.status_code == 201
+
+    new_user['username'] = 'blabla2'
+
+    rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
+    assert rv.status_code == 409
+
+
+def test_users_is_not_created_because_username_already_exists(init_database, test_client):
+    new_user = {
+        'username': 'blabla',
+        'email': 'blabla@example.com',
+        'password': '123456789'
+    }
+    rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
+    assert rv.status_code == 201
+
+    new_user['email'] = 'blabla2@example.com'
+
+    rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
+    assert rv.status_code == 409
+
+def test_users_is_not_created_because_password_is_too_short(init_database, test_client):
+    new_user = {
+        'username': 'blabla',
+        'email': 'blabla@example.com',
+        'password': '12345'
+    }
+    rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
+    assert rv.status_code == 400
+
+
 def test_users_returns_400_when_payload_is_incomplete(init_database, test_client):
     new_user = {
         'email': 'blabla@example.com',
-        'password': '12345'
+        'password': '123456789'
     }
     rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
 
@@ -33,7 +72,7 @@ def test_users_returns_400_when_payload_is_incomplete(init_database, test_client
 
     new_user = {
         'username': 'blabla',
-        'password': '12345'
+        'password': '123456789'
     }
     rv = test_client.post('/api/v1/account/create/', data=json.dumps(new_user))
 

@@ -6,7 +6,7 @@ from flask_restful import Resource
 from flask_bcrypt import generate_password_hash, check_password_hash
 
 from battleforcastile_auth import db
-from battleforcastile_auth.constants import BCRYPT_LOG_ROUNDS
+from battleforcastile_auth.constants import BCRYPT_LOG_ROUNDS, MIN_PASSWORD_LENGTH
 from battleforcastile_auth.models import User
 from battleforcastile_auth.serializers.users import serialize_user
 
@@ -23,6 +23,15 @@ class UserListResource(Resource):
         ):
             abort(400)
 
+        if (
+                User.query.filter(User.username == data.get('username')).count() or
+                User.query.filter(User.email == data.get('email')).count()
+        ):
+            return 'username/email already taken', 409
+
+        if len(data.get('password')) < MIN_PASSWORD_LENGTH:
+            return f'password too short (minimum {MIN_PASSWORD_LENGTH} characters)', 400
+
         user = User(
             username=data['username'],
             email=data['email'],
@@ -33,6 +42,7 @@ class UserListResource(Resource):
         db.session.commit()
 
         return serialize_user(user), 201
+
 
 class GetUserResource(Resource):
     def post(self):
@@ -46,6 +56,22 @@ class GetUserResource(Resource):
         user = User.query.filter(User.token == data.get('token')).first()
         if user:
             return serialize_user(user), 200
+        return '', 404
+
+
+class DeleteUserResource(Resource):
+    def delete(self):
+        data = json.loads(request.data) if request.data else {}
+        if (
+            not data.get('token')
+        ):
+            abort(400)
+
+        user = User.query.filter(User.token == data.get('token')).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return '', 204
         return '', 404
 
 
