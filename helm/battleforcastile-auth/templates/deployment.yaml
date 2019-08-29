@@ -59,6 +59,8 @@ spec:
                 secretKeyRef:
                   name: battleforcastile-auth-secrets
                   key: sqlalchemy_database_uri
+            - name: PRODUCTION_MODE
+              value: "true"
           livenessProbe:
             httpGet:
               path: /
