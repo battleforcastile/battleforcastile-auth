@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/battleforcastile/battleforcastile-auth/tree/master.svg?style=svg)](https://circleci.com/gh/battleforcastile/battleforcastile-auth/tree/master)
 
-This micro-service handles the Authenticaton and User creation.
+This micro-service handles the Authentication and User creation.
 ## 1. Installation and set up
 
 This guide assumes that there's a K8s cluster (with Helm-tiller) and Postgres SQL DB set up in Google Cloud.
@@ -39,18 +39,11 @@ gcloud iam service-accounts keys create key.json --iam-account <service_account_
 openssl base64 < key.json | tr -d '\n'
 ```
 
-#### 1.6 Go to `/helm/battleforcastile_auth/` folder and copy the content from `templates_examples` to `templates`
-```
-cp helm/batteforcastile_match_recorder/templates_examples/* helm/battleforcastile_auth/templates/*
-```
+#### 1.6 Go to `/helm/battleforcastile_auth/values.yml` and replace the `instance_connection_name` by the one you get from Google cloud (It will be something like `<project>:<zone>:<sql_instance_name>`)
 
-#### 1.7 Uncomment the content from `cloudsql_instance_credentials.yml` (from `templates`) and replace:
- - The value of `credentials.json` by the `base64` value we wrote down previously (`key.json`)
+#### 1.7 Run `helm install helm/battleforcastile_auth --set cloudsqlcredentials=... --set secretkey=... --set sqlalchemydatabaseuri=...` and in a few minutes it should be deployed! :)
 
-#### 1.8 Uncomment the content from `battleforcastile_auth_secrets.yml` (from `templates`) and replace:
- - The value of `secret_key` by the `base64` value of the secret key of your Flask App (can be random)
- - The value of `sqlalchemy_database_uri` by the `base64` value of the DB URI from Google Cloud (It will be something like `postgresql+pg8000://<db_user>:<db_password>@127.0.0.1:5432/<database_name>`)
+* The value of `cloudsqlcredentials` is the `base64` value we wrote down previously (`key.json`)
+* The value of `secretkey` is the `base64` value of the secret key of your Flask App (can be random)
+* The value of `sqlalchemydatabaseuri` is the `base64` value of the DB URI from Google Cloud (It will be something like `postgresql+pg8000://<db_user>:<db_password>@127.0.0.1:5432/<database_name>`)
 
-#### 1.9 Go to `/helm/battleforcastile_auth/values.yml` and replace the `instance_connection_name` by the one you get from Google cloud (It will be something like `<project>:<zone>:<sql_instance_name>`)
-
-#### 1.10 Run `helm install helm/battleforcastile_auth` and in a few minutes it should be deployed! :)
