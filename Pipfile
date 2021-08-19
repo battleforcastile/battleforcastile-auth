@@ -10,7 +10,7 @@ pytest-cov = "*"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
-pg8000 = "==1.11.0"
+pg8000 = "*"
 alembic = "*"
 flask-migrate = "*"
 flask-restful = "*"
@@ -19,4 +19,4 @@ flask-bcrypt = "*"
 google-cloud-logging = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
