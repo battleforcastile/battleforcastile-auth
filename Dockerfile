@@ -32,17 +32,19 @@ RUN set -ex \
         \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
     \) -exec rm -rf '{}' +
 
+RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir pipenv
 
 RUN mkdir /app
 WORKDIR /app
 
 COPY Pipfile Pipfile
+COPY Pipfile.lock Pipfile.lock
 
-RUN pipenv install --deploy
+RUN pipenv install --deploy --system
 
 COPY . /app
 
-CMD pipenv run flask db upgrade && pipenv run uwsgi --socket 0.0.0.0:5000 --protocol=http --lazy-apps --enable-threads --logger-req="stdio" -w wsgi:app
+CMD flask db upgrade && uwsgi --socket 0.0.0.0:5000 --protocol=http --lazy-apps --enable-threads --logger-req="stdio" -w wsgi:app
 
 EXPOSE 5000

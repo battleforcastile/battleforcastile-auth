@@ -10,7 +10,7 @@ pytest-cov = "*"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
-pg8000 = "*"
+psycopg2-binary = "*"
 alembic = "*"
 flask-migrate = "*"
 flask-restful = "*"
